@@ -15,5 +15,11 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        $exceptions->render(function (\Illuminate\Validation\ValidationException $throwable) {
+            return jsonResponse(
+                message: $throwable->getMessage(),
+                status: \Illuminate\Http\Response::HTTP_UNPROCESSABLE_ENTITY,
+                errors: $throwable->errors()
+            );
+        });
     })->create();
